@@ -3,10 +3,11 @@ var prompt = require('prompt');
 var colors = require('colors/safe');
 var Table = require('cli-table');
 var connection = mysql.createConnection({
-	host: 127.0.01,
+	host: "127.0.0.1",
 	user: 'root',
 	password: 'root',
-	database: 'bamazon', 
+    database: 'bamazon', 
+    port: 3307
 });
 
 var inventoryUpdate = [];

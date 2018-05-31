@@ -3,19 +3,20 @@ var prompt = require('prompt');
 var colors = require('colors/safe');
 var Table = require('cli-table');
 var connection = mysql.createConnection({
-	host: 'localhost',
+	host: '127.0.0.1',
 	user: 'root',
-	password: '',
-	database: 'Bamazon', 
+	password: 'root',
+    database: 'bamazon', 
+    port: 3307,
 });
 
 var productPurchased = [];
 
 connection.connect();
 
-//connect to the mysql database and pull the information from the Products database to display to the user
-connection.query('SELECT ItemID, ProductName, Price FROM Products', function(err, result){
-	if(err) console.log(err);
+//connect to the mysql database and pull the information from the products database to display to the user
+connection.query('SELECT item_id, product_name, price FROM products', function(err, result){
+	if(err) return console.log(err);
 
 	//creates a table for the information from the mysql database to be placed
 	var table = new Table({
@@ -56,7 +57,7 @@ var purchase = function(){
 
 		//places these responses in the variable custPurchase
 		var custPurchase = {
-			itemID: res.itemID,
+			item_id: res.itemID,
 			Quantity: res.Quantity
 		};
 		
@@ -64,7 +65,7 @@ var purchase = function(){
 		productPurchased.push(custPurchase);
 
 		//connects to the mysql database and selects the item the user selected above based on the item id number entered
-		connection.query('SELECT * FROM Products WHERE ItemID=?', productPurchased[0].itemID, function(err, res){
+		connection.query('SELECT * FROM products WHERE item_id=?', productPurchased[0].itemID, function(err, res){
 				if(err) console.log(err, 'That item ID doesn\'t exist');
 				
 				//if the stock quantity available is less than the amount that the user wanted to purchase then the user will be alerted that the product is out of stock
@@ -96,7 +97,7 @@ var purchase = function(){
 					newQuantity = res[0].StockQuantity - productPurchased[0].Quantity;
 			
 					// connects to the mysql database products and updates the stock quantity for the item puchased
-					connection.query("UPDATE Products SET StockQuantity = " + newQuantity +" WHERE ItemID = " + productPurchased[0].itemID, function(err, res){
+					connection.query("UPDATE products SET stock_quantity = " + newQuantity +" WHERE item_id = " + productPurchased[0].itemID, function(err, res){
 						// if(err) throw err;
 						// console.log('Problem ', err);
 						console.log('');
