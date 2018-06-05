@@ -47,7 +47,7 @@ prompt.get(managerOptions, function(err, res){
 //this is the function for option 1 of the question above.
 var viewProducts = function(){
 	//connects to the mysql database called products and returns the information from that database
-	connection.query('SELECT * FROM Products', function(err, res){
+	connection.query('SELECT * FROM products', function(err, res){
 		console.log('');
 		console.log('Products for Sale')
 		console.log('');	
@@ -79,7 +79,7 @@ var viewProducts = function(){
 var viewInventory = function(){
 
 	//starts the connection to the mysql database Products and only returns items that have a stock quantity of less than 5
-	connection.query('SELECT * FROM Products WHERE StockQuantity < 5', function(err, res){
+	connection.query('SELECT * FROM products WHERE stock_quantity < 5', function(err, res){
 		console.log('');
 		console.log('Items With Low Inventory');
 		console.log('');
@@ -96,7 +96,7 @@ var viewInventory = function(){
 		//loops through the data returned from mysql and pushes it into the table to be logged on the console
 		for(var i=0; i<res.length; i++){
 			table.push(
-				[res[i].ItemID, res[i].ProductName, res[i].DepartmentName, res[i].Price, res[i].StockQuantity]
+				[res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
 			);
 		}
 
